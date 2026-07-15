@@ -58,27 +58,35 @@
             flex-direction: column;
         }
 
-        h1 { font-size: 28px; margin-bottom: 10px; color: var(--text); }
+        h1 { font-size: 28px; margin-bottom: 5px; color: var(--text); }
         h2 { font-size: 20px; margin-top: 0; color: var(--secondary); border-bottom: 2px dashed #eee; padding-bottom: 10px; margin-bottom: 20px; }
-        .subtitle { font-size: 16px; color: #7f8c8d; margin-bottom: 30px; }
-        label { display: block; text-align: left; font-weight: 600; margin-bottom: 8px; font-size: 14px; }
+        .subtitle { font-size: 16px; color: #7f8c8d; margin-bottom: 10px; }
+        
+        /* RUANG KEPUTUSAN (Dinaikkan ke atas) */
+        #result-container { margin: 10px 0 20px 0; min-height: 120px; position: relative; display: flex; justify-content: center; align-items: center;}
 
-        .upload-btn { display: block; margin-bottom: 15px; font-size: 14px; color: #7f8c8d; width: 100%; }
-        .upload-btn::file-selector-button {
-            background-color: #f0f2f5; border: 1px solid #dcdde1; padding: 8px 15px;
-            border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 600;
-            color: var(--text); transition: background-color 0.2s; margin-right: 10px;
+        #result {
+            font-size: 30px; font-weight: 700; color: #7f8c8d;
+            word-wrap: break-word; opacity: 0; transform: scale(0.8);
+            transition: opacity 0.3s, transform 0.3s;
         }
-        .upload-btn::file-selector-button:hover { background-color: #e2e6ea; }
-
-        textarea {
-            width: 100%; height: 180px; padding: 15px; border-radius: 12px;
-            border: 2px solid #e0e0e0; font-family: inherit; font-size: 14px;
-            resize: none; box-sizing: border-box; transition: border-color 0.3s;
+        #result.show { opacity: 1; transform: scale(1); }
+        
+        #result.countdown-text {
+            font-size: 80px;
+            color: #e74c3c; 
+            font-weight: 900;
         }
-        textarea:focus { border-color: var(--primary); outline: none; }
 
-        .controls { margin-top: 25px; display: flex; gap: 10px; justify-content: center; align-items: center; }
+        #result.winner-text {
+            font-size: 45px; /* Saiz dah dikecilkan kepada 45px */
+            color: var(--primary);
+            font-weight: 900;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+        }
+
+        /* RUANG BUTANG */
+        .controls { margin-bottom: 30px; display: flex; gap: 10px; justify-content: center; align-items: center; }
 
         .pick-btn {
             background: linear-gradient(90deg, var(--primary) 0%, #29b6b6 100%);
@@ -96,27 +104,30 @@
         }
         .reset-btn:hover { background-color: #e0e0e0; }
 
-        #result-container { margin-top: 30px; min-height: 120px; position: relative; display: flex; justify-content: center; align-items: center;}
-
-        #result {
-            font-size: 30px; font-weight: 700; color: #7f8c8d;
-            word-wrap: break-word; opacity: 0; transform: scale(0.8);
-            transition: opacity 0.3s, transform 0.3s;
-        }
-        #result.show { opacity: 1; transform: scale(1); }
-        
-        #result.countdown-text {
-            font-size: 80px;
-            color: #e74c3c; 
-            font-weight: 900;
+        /* RUANG INPUT (Diturunkan ke bawah) */
+        .input-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px dashed #ccc;
         }
 
-        #result.winner-text {
-            font-size: 40px; 
-            color: var(--primary);
-            font-weight: 900;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+        label { display: block; text-align: left; font-weight: 600; margin-bottom: 8px; font-size: 14px; color: #34495e;}
+
+        .upload-btn { display: block; margin-bottom: 15px; font-size: 14px; color: #7f8c8d; width: 100%; }
+        .upload-btn::file-selector-button {
+            background-color: white; border: 1px solid #dcdde1; padding: 8px 15px;
+            border-radius: 8px; cursor: pointer; font-family: inherit; font-weight: 600;
+            color: var(--text); transition: background-color 0.2s; margin-right: 10px;
         }
+        .upload-btn::file-selector-button:hover { background-color: #e2e6ea; }
+
+        textarea {
+            width: 100%; height: 120px; padding: 15px; border-radius: 12px;
+            border: 2px solid #e0e0e0; font-family: inherit; font-size: 14px;
+            resize: none; box-sizing: border-box; transition: border-color 0.3s;
+        }
+        textarea:focus { border-color: var(--primary); outline: none; }
 
         ul#historyList {
             list-style: none; padding: 0; margin: 0;
@@ -150,21 +161,23 @@
     <div class="wrapper">
         <div class="main-card">
             <h1>RANDOM PICKER</h1>
-            <p class="subtitle">Cepat, Adil, & Fun! ✨</p>
+            <p class="subtitle">Fair! ✨</p>
             
-            <label for="fileInput">Muat Naik Fail (.txt / .csv):</label>
-            <input type="file" id="fileInput" accept=".txt,.csv" class="upload-btn">
+            <div id="result-container">
+                <div id="result"></div>
+            </div>
 
-            <label for="itemList">Atau tampal (paste) senarai pilihan di sini:</label>
-            <textarea id="itemList" placeholder="Contoh:&#10;Ali&#10;Siti&#10;Muthu&#10;Buku Rujukan"></textarea>
-            
             <div class="controls">
                 <button class="pick-btn" id="pickBtn" onclick="pickRandom()">PILIH RAWAK! 🎲</button>
                 <button class="reset-btn" onclick="resetPicker()">RESET LIST</button>
             </div>
 
-            <div id="result-container">
-                <div id="result"></div>
+            <div class="input-section">
+                <label for="fileInput">Muat Naik Fail (.txt / .csv):</label>
+                <input type="file" id="fileInput" accept=".txt,.csv" class="upload-btn">
+
+                <label for="itemList">Atau tampal (paste) senarai pilihan di sini:</label>
+                <textarea id="itemList" placeholder="Contoh:&#10;Ali&#10;Siti&#10;Muthu&#10;Buku Rujukan"></textarea>
             </div>
 
             <div class="footer">Dikuasakan oleh JavaScript & GitHub Pages</div>
@@ -213,7 +226,7 @@
                     const randomTemp = items[Math.floor(Math.random() * items.length)];
                     resultDiv.innerText = randomTemp;
                     
-                    const randomInterval = Math.floor(Math.random() * (500 - 300 + 1)) + 300;
+                    const randomInterval = Math.floor(Math.random() * (700 - 300 + 1)) + 300;
                     setTimeout(doShuffle, randomInterval);
                 } else {
                     startCountdown();
@@ -223,7 +236,7 @@
             doShuffle();
 
             function startCountdown() {
-                let count = 5;
+                let count = 3;
                 resultDiv.className = 'countdown-text show'; 
                 resultDiv.innerText = count;
 
@@ -246,9 +259,9 @@
                 resultDiv.className = 'winner-text show';
                 resultDiv.innerText = finalWinner;
                 
-                // --- KESAN BUNGA API MERDEKA 🇲🇾 ---
-                const merdekaColors = ['#ed1c24', '#003478', '#ffcc00', '#ffffff']; // Merah, Biru, Kuning, Putih
-                const fireworksDuration = 3 * 1000; // Letup selama 3 saat
+                // KESAN BUNGA API MERDEKA
+                const merdekaColors = ['#ed1c24', '#003478', '#ffcc00', '#ffffff']; 
+                const fireworksDuration = 3 * 1000; 
                 const animationEnd = Date.now() + fireworksDuration;
                 const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
 
@@ -265,28 +278,24 @@
 
                     const particleCount = 50 * (timeLeft / fireworksDuration);
                     
-                    // Tembak dari belah kiri
                     confetti(Object.assign({}, defaults, { 
                         particleCount, 
                         origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
                         colors: merdekaColors
                     }));
                     
-                    // Tembak dari belah kanan
                     confetti(Object.assign({}, defaults, { 
                         particleCount, 
                         origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
                         colors: merdekaColors
                     }));
                 }, 250);
-                // -----------------------------------
                 
                 winnerCount++;
                 const li = document.createElement('li');
                 li.innerHTML = `${finalWinner} <span class="badge">#${winnerCount}</span>`;
                 historyList.prepend(li);
                 
-                // Aktifkan butang selepas 3 saat (bila bunga api habis) supaya user tak kelam kabut klik
                 setTimeout(() => {
                     btn.disabled = false;
                     btn.innerText = "PILIH RAWAK! 🎲";
