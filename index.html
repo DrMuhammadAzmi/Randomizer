@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random Picker: Pilihan Rawak Mudah!</title>
+    <title>Random Picker: Pilihan Rawak Awak!</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         :root {
@@ -213,7 +213,7 @@
                     const randomTemp = items[Math.floor(Math.random() * items.length)];
                     resultDiv.innerText = randomTemp;
                     
-                    const randomInterval = Math.floor(Math.random() * (700 - 300 + 1)) + 300;
+                    const randomInterval = Math.floor(Math.random() * (500 - 300 + 1)) + 300;
                     setTimeout(doShuffle, randomInterval);
                 } else {
                     startCountdown();
@@ -223,7 +223,7 @@
             doShuffle();
 
             function startCountdown() {
-                let count = 3;
+                let count = 5;
                 resultDiv.className = 'countdown-text show'; 
                 resultDiv.innerText = count;
 
