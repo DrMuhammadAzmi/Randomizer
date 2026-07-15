@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random Picker: Pilihan Rawak Awak!</title>
-    <!-- Guna library Confetti luaran untuk effect gempak -->
+    <title>Random Picker: Pilihan Rawak Mudah!</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         :root {
-            --primary: #2ed1d1; /* Teal */
-            --secondary: #9c27b0; /* Purple */
+            --primary: #2ed1d1; 
+            --secondary: #9c27b0; 
             --background: linear-gradient(135deg, #e0f7f7 0%, #e1bee7 100%);
             --text: #2c3e50;
         }
@@ -20,20 +19,19 @@
             color: var(--text);
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Ubah supaya kotak bermula dari atas */
+            align-items: flex-start; 
             min-height: 100vh;
             margin: 0;
             padding: 40px 20px;
             box-sizing: border-box;
         }
 
-        /* Container untuk susun kotak sebelah-sebelah */
         .wrapper {
             display: flex;
             gap: 25px;
             width: 100%;
             max-width: 950px;
-            flex-wrap: wrap; /* Kalau skrin kecil, ia akan turun bawah automatik */
+            flex-wrap: wrap; 
             justify-content: center;
         }
 
@@ -62,9 +60,7 @@
 
         h1 { font-size: 28px; margin-bottom: 10px; color: var(--text); }
         h2 { font-size: 20px; margin-top: 0; color: var(--secondary); border-bottom: 2px dashed #eee; padding-bottom: 10px; margin-bottom: 20px; }
-        
         .subtitle { font-size: 16px; color: #7f8c8d; margin-bottom: 30px; }
-
         label { display: block; text-align: left; font-weight: 600; margin-bottom: 8px; font-size: 14px; }
 
         .upload-btn { display: block; margin-bottom: 15px; font-size: 14px; color: #7f8c8d; width: 100%; }
@@ -100,16 +96,28 @@
         }
         .reset-btn:hover { background-color: #e0e0e0; }
 
-        #result-container { margin-top: 30px; min-height: 80px; position: relative; }
+        #result-container { margin-top: 30px; min-height: 120px; position: relative; display: flex; justify-content: center; align-items: center;}
 
         #result {
-            font-size: 36px; font-weight: 800; color: var(--primary);
+            font-size: 30px; font-weight: 700; color: #7f8c8d;
             word-wrap: break-word; opacity: 0; transform: scale(0.8);
-            transition: opacity 0.4s, transform 0.4s;
+            transition: opacity 0.3s, transform 0.3s;
         }
         #result.show { opacity: 1; transform: scale(1); }
+        
+        #result.countdown-text {
+            font-size: 80px;
+            color: #e74c3c; 
+            font-weight: 900;
+        }
 
-        /* Style untuk senarai pemenang */
+        #result.winner-text {
+            font-size: 60px; 
+            color: var(--primary);
+            font-weight: 900;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+        }
+
         ul#historyList {
             list-style: none; padding: 0; margin: 0;
             overflow-y: auto; flex-grow: 1;
@@ -135,14 +143,11 @@
             margin-top: 40px; font-size: 12px; color: #95a5a6;
             border-top: 1px solid #eee; padding-top: 15px; text-align: center;
         }
-        .github-icon { margin-top: 10px; opacity: 0.6; }
-
     </style>
 </head>
 <body>
 
     <div class="wrapper">
-        <!-- KOTAK UTAMA: PICKER -->
         <div class="main-card">
             <h1>RANDOM PICKER</h1>
             <p class="subtitle">Cepat, Adil, & Fun! ✨</p>
@@ -162,31 +167,21 @@
                 <div id="result"></div>
             </div>
 
-            <div class="footer">
-                Dikuasakan oleh JavaScript & GitHub Pages
-                <div class="github-icon">
-                    <svg height="20" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="20"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path></svg>
-                </div>
-            </div>
+            <div class="footer">Dikuasakan oleh JavaScript & GitHub Pages</div>
         </div>
 
-        <!-- KOTAK KEDUA: SENARAI PEMENANG -->
         <div class="history-card">
             <h2>Senarai Pemenang 🏆</h2>
-            <ul id="historyList">
-                <!-- Nama pemenang akan masuk di sini secara dinamik -->
-            </ul>
+            <ul id="historyList"></ul>
         </div>
     </div>
 
     <script>
         let winnerCount = 0;
 
-        // Fungsi membaca fail
         document.getElementById('fileInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;
-
             const reader = new FileReader();
             reader.onload = function(event) {
                 document.getElementById('itemList').value = event.target.result;
@@ -194,7 +189,6 @@
             reader.readAsText(file);
         });
 
-        // Fungsi memilih secara rawak
         function pickRandom() {
             const text = document.getElementById('itemList').value;
             const items = text.split('\n').filter(item => item.trim() !== '');
@@ -208,59 +202,105 @@
             }
 
             btn.disabled = true;
-            btn.innerText = "Tengah Pilih...";
-            resultDiv.classList.remove('show');
+            btn.innerText = "Sila Tunggu...";
+            resultDiv.className = 'show'; 
+            
+            const shuffleDuration = 5000; 
+            const endTime = Date.now() + shuffleDuration;
 
-            let counter = 0;
-            const interval = setInterval(() => {
-                const randomTemp = items[Math.floor(Math.random() * items.length)];
-                resultDiv.innerText = randomTemp;
-                resultDiv.style.opacity = "0.5";
-                resultDiv.style.transform = "scale(0.9)";
-                counter++;
+            function doShuffle() {
+                if (Date.now() < endTime) {
+                    const randomTemp = items[Math.floor(Math.random() * items.length)];
+                    resultDiv.innerText = randomTemp;
+                    
+                    const randomInterval = Math.floor(Math.random() * (700 - 300 + 1)) + 300;
+                    setTimeout(doShuffle, randomInterval);
+                } else {
+                    startCountdown();
+                }
+            }
 
-                if (counter > 25) {
-                    clearInterval(interval);
-                    const finalWinner = items[Math.floor(Math.random() * items.length)];
+            doShuffle();
+
+            function startCountdown() {
+                let count = 3;
+                resultDiv.className = 'countdown-text show'; 
+                resultDiv.innerText = count;
+
+                const countInterval = setInterval(() => {
+                    count--;
+                    if (count > 0) {
+                        resultDiv.classList.remove('show');
+                        setTimeout(() => resultDiv.classList.add('show'), 50);
+                        resultDiv.innerText = count;
+                    } else {
+                        clearInterval(countInterval);
+                        showFinalWinner();
+                    }
+                }, 1000);
+            }
+
+            function showFinalWinner() {
+                const finalWinner = items[Math.floor(Math.random() * items.length)];
+                
+                resultDiv.className = 'winner-text show';
+                resultDiv.innerText = finalWinner;
+                
+                // --- KESAN BUNGA API MERDEKA 🇲🇾 ---
+                const merdekaColors = ['#ed1c24', '#003478', '#ffcc00', '#ffffff']; // Merah, Biru, Kuning, Putih
+                const fireworksDuration = 3 * 1000; // Letup selama 3 saat
+                const animationEnd = Date.now() + fireworksDuration;
+                const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+                function randomInRange(min, max) {
+                    return Math.random() * (max - min) + min;
+                }
+
+                const interval = setInterval(function() {
+                    const timeLeft = animationEnd - Date.now();
+
+                    if (timeLeft <= 0) {
+                        return clearInterval(interval);
+                    }
+
+                    const particleCount = 50 * (timeLeft / fireworksDuration);
                     
-                    // Paparkan pemenang
-                    resultDiv.innerText = finalWinner;
-                    resultDiv.style.opacity = "1";
-                    resultDiv.style.transform = "scale(1)";
-                    resultDiv.classList.add('show');
+                    // Tembak dari belah kiri
+                    confetti(Object.assign({}, defaults, { 
+                        particleCount, 
+                        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+                        colors: merdekaColors
+                    }));
                     
-                    // Effect Confetti
-                    confetti({
-                        particleCount: 100,
-                        spread: 70,
-                        origin: { y: 0.6 },
-                        colors: ['#2ed1d1', '#9c27b0', '#ffeb3b']
-                    });
-                    
-                    // Tambah pemenang ke dalam senarai "History"
-                    winnerCount++;
-                    const li = document.createElement('li');
-                    li.innerHTML = `${finalWinner} <span class="badge">#${winnerCount}</span>`;
-                    
-                    // prepend() digunakan supaya nama terbaru sentiasa berada di bahagian atas list
-                    historyList.prepend(li);
-                    
+                    // Tembak dari belah kanan
+                    confetti(Object.assign({}, defaults, { 
+                        particleCount, 
+                        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+                        colors: merdekaColors
+                    }));
+                }, 250);
+                // -----------------------------------
+                
+                winnerCount++;
+                const li = document.createElement('li');
+                li.innerHTML = `${finalWinner} <span class="badge">#${winnerCount}</span>`;
+                historyList.prepend(li);
+                
+                // Aktifkan butang selepas 3 saat (bila bunga api habis) supaya user tak kelam kabut klik
+                setTimeout(() => {
                     btn.disabled = false;
                     btn.innerText = "PILIH RAWAK! 🎲";
-                }
-            }, 40);
+                }, fireworksDuration);
+            }
         }
 
-        // Fungsi set semula kotak input sahaja
         function resetPicker() {
             document.getElementById('itemList').value = '';
             document.getElementById('fileInput').value = ''; 
             const resultDiv = document.getElementById('result');
             resultDiv.innerText = '';
-            resultDiv.classList.remove('show');
-            // Nota: Senarai pemenang TIDAK dipadam. Ia hanya hilang jika browser ditutup.
+            resultDiv.className = '';
         }
     </script>
-
 </body>
 </html>
